@@ -22,17 +22,34 @@ app.get("/api/v1/users", (req, res, next) => {
     console.log("Request received for users endpoint.");
     res.sendFile(path.join(`${__dirname}/../frontend/users.json`));
 
-    /* const users = [...]  //átemelve a users.json-be 
+    /* const users = [...]  // tartalma átemelve a users.json-be 
     
     res.send(JSON.stringify(users)) */
 })
 
 app.get("/api/v1/users/active", (req, res, next) => {
     console.log("Request received for active users endpoint.");
+    fs.readFile("../frontend/users.json", (error, data) => {
+        if (error) {
+            res.send("Error occurred")
+        } else  {
+            const users = JSON.parse(data)
+            const activeUsers = users.filter(user => user.status === "active");
+            res.send(activeUsers)
+        }
+    })
 })
 
 app.get("/api/v1/users/passive", (req, res, next) => {
     console.log("Request received for passive users endpoint.");
+    fs.readFile("../frontend/users.json", (error, data) => {
+        if (error) {
+            res.send("Error occurred")
+        } else  {
+            const users = JSON.parse(data)
+            res.send(users.filter(user => user.status === "passive"));
+        }
+    })
 })
 
 app.use('/pub', express.static(`${__dirname}/../frontend/public`));
