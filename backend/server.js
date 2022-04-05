@@ -3,31 +3,43 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const app = express();
-const port= 9000;
+app.use(express.json());
+
+const port = 9000;
+
+const fFolder = `${__dirname}/../frontend`
 
 app.get("/", (req, res, next) => {                  // next = legyen-e további művelet végrehajtva, ha végzett?
-    res.sendFile(path.join(`${__dirname}/../frontend/index.html`));
+    res.sendFile(path.join(`${fFolder}/index.html`));
 }) 
 
+app.get("/admin/order-view", (req, res, next) => {
+    res.sendFile(path.join(`${fFolder}/index.html`));
+});
+
 app.get("/kiscica", (req, res, next) => {                 
-    res.sendFile(path.join(`${__dirname}/../frontend/somefile.json`));
+    res.sendFile(path.join(`${fFolder}/somefile.json`));
 }) 
 
 app.get("/something", (req, res, next) => {
-    console.log("Request received for something endpoint.");
+    console.log (`Request received for "something" endpoint.`);
     res.send(`Thank you for your request. This is our response for "something" endpoint.`)
 }) 
 
-app.get("/api/v1/users", (req, res, next) => {
+app.get("/api/v1/users", (req, res) => {
     console.log("Request received for users endpoint.");
-    res.sendFile(path.join(`${__dirname}/../frontend/users.json`));
+    res.sendFile(path.join(`${fFolder}/users.json`));
+
+    /* const users = [...]  // tartalma átemelve a users.json-be 
+    
+    res.send(JSON.stringify(users)) */
 })
 
 app.get("/api/v1/users-query", (req, res) => {
     console.dir(req.query)
     console.dir(req.query.apiKey)
     if (req.query.apiKey === "apple") {
-        res.sendFile(path.join(`${__dirname}/../frontend/users.json`))
+        res.sendFile(path.join(`${fFolder}/users.json`))
     } else {
         res.send("Unauthorized request")
     }
@@ -42,11 +54,6 @@ app.get("/api/v1/users-query", (req, res) => {
         res.send("Nem azt írtad be, hogy alma")
     }   
 }) */
-
-
-    /* const users = [...]  // tartalma átemelve a users.json-be 
-    
-    res.send(JSON.stringify(users)) */
 
 
 /* app.get("/api/v1/users/active", (req, res, next) => {
@@ -90,9 +97,30 @@ app.get("/api/v1/users-params/:key", (req, res, next) => {
     })
 })
 
+app.post("/users/new", (req, res) => {
+    fs.readFile("../frontend/users.json", (error, data) => {
+        if (error) {
+            console.log(error);
+            res.send("Error reading users file")
+        } else {
+            const users = JSON.parse(data)
+            console.log(req.body);
+            users.push(req.body)
+            
+            fs.writeFile("../frontend/users.json", JSON.stringify(users), error => {
+                if (error) {
+                    console.log(error);
+                    res.send("Error writing users file")
+                }
+            })
+            res.send(req.body)
+        }
+    })
+})
 
 
-app.use('/pub', express.static(`${__dirname}/../frontend/public`));
+
+app.use('/pub', express.static(`${fFolder}/public`));
 
 app.listen(port, () => {
     console.log(`http://127.0.0.1:${port}`);

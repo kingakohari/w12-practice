@@ -1,13 +1,1 @@
-[
-    {
-        "name": "John",
-        "surname": "Doe",
-        "status": "active"
-    },
-
-    {
-        "name": "Bela",
-        "surname": "Nagy",
-        "status": "passive"
-    }
-]
+[{"firstName":"Kinga","lastName":"Kohari","status":"active"},{"firstName":"Fasz","lastName":"Nagy","status":"passive"},{"firstName":"Fasz","lastName":"Kis"},{"firstName":"Béla","lastName":"Kovács"}]
