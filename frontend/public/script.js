@@ -14,11 +14,37 @@ const userComponent = ({firstName, lastName}) => {
 
 const addUserComponent = () => {
     return`
-    <div>
-        <input type="text" class="firstName" name="firstName" placeholder="First name">
-        <input type="text" class="lastName" name="lastName" placeholder="Last name">
-        <button class="addNew">Send</button>
-    </div>
+    <form id="form">
+
+        <input type="file" class="picture" name="picture"><br>
+
+        <label for="fname">First name</label><br>
+        <input type="text" class="fname" name="fname"><br>
+
+        <label for="lname">Last name</label><br>
+        <input type="text" class="lname" name="lname"><br>
+
+        <label for="street">Street</label><br>
+        <input type="text" class="street" name="street"><br>
+
+        <label for="hnumber">House number</label><br>
+        <input type="text" class="hnumber" name="hnumber"><br>
+
+        <label for="city">City</label><br>
+        <input type="text" class="city" name="city"><br>
+
+        <label for="zip">Zip code</label><br>
+        <input type="number" class="zip" name="zip" min="1000" max="99999"><br>
+
+        <label for="country">Country</label><br>
+        <input type="text" class="country" name="country"><br>
+
+        <label for="intro">Introduction</label><br>
+        <textarea name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
+
+        <button class="button">Save</button>
+        <input type = "reset" value = "Reset">
+</form>
     `
 }
 
@@ -40,15 +66,29 @@ const loadEvent = async () => {
     )
 
     rootElement.insertAdjacentHTML("afterend", addUserComponent())
-
-    const button = document.querySelector(".addNew")
-    const firstName = document.querySelector(".firstName")
-    const lastName = document.querySelector(".lastName")
+    
+    const button = e.target.querySelector(".button")
+    const picture = e.target.querySelector(".picture")
+    const firstName = e.target.querySelector(".fname")
+    const lastName = e.target.querySelector(".lname")
+    const street = e.target.querySelector(".street")
+    const houseNumber = e.target.querySelector(".hnumber")
+    const city = e.target.querySelector(".city")
+    const zip = e.target.querySelector(".zip")
+    const country = e.target.querySelector(".country")
+    const intro = e.target.querySelector(".intro")
 
     button.addEventListener("click", event => {
         const userData = {
-            firstName: firstName.value,
-            lastName: lastName.value
+            first_name: firstName.value,
+            last_name: lastName.value,
+            street: street.value,
+            house_number: houseNumber.value,
+            city: city.value,
+            zip: zip.value,
+            country: country.value,
+            intro: intro.value,
+            image_name: picture.files[0]
         }
     
         fetch("/users/new", {
