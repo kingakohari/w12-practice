@@ -13,26 +13,10 @@ app.get("/", (req, res, next) => {                  // next = legyen-e további 
     res.sendFile(path.join(`${fFolder}/index.html`));
 }) 
 
-app.get("/admin/order-view", (req, res, next) => {
-    res.sendFile(path.join(`${fFolder}/index.html`));
-});
-
-app.get("/kiscica", (req, res, next) => {                 
-    res.sendFile(path.join(`${fFolder}/somefile.json`));
-}) 
-
-app.get("/something", (req, res, next) => {
-    console.log (`Request received for "something" endpoint.`);
-    res.send(`Thank you for your request. This is our response for "something" endpoint.`)
-}) 
 
 app.get("/api/v1/users", (req, res) => {
     console.log("Request received for users endpoint.");
     res.sendFile(path.join(`${fFolder}/users.json`));
-
-    /* const users = [...]  // tartalma átemelve a users.json-be 
-    
-    res.send(JSON.stringify(users)) */
 })
 
 app.get("/api/v1/users-query", (req, res) => {
