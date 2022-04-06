@@ -62,7 +62,7 @@ const pictureComponent = `
 const loadEvent = async (e) => {
 
 
-    const result = await parseJSON("/api/v1/users")
+    const result = await parseJSON("/api/v1/profile")
     const rootElement = document.getElementById("root")
     
     rootElement.insertAdjacentHTML("beforeend", addUserComponent())
@@ -96,7 +96,7 @@ const loadEvent = async (e) => {
             intro: intro.value,
         }
     
-        fetch("/users/new", {
+        fetch("/profile/new", {
             method: "POST",
             headers: {
                 "Content-Type" : "application/json"

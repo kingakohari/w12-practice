@@ -15,9 +15,9 @@ app.get("/", (req, res, next) => {
     res.sendFile(path.join(`${fFolder}/index.html`));
 }) 
 
-app.get("/api/v1/users", (req, res) => {
-    console.log("Request received for users endpoint.");
-    res.sendFile(path.join(`${fFolder}/users.json`));
+app.get("/api/v1/profile", (req, res) => {
+    console.log("Request received for profile endpoint.");
+    res.sendFile(path.join(`${fFolder}/profile.json`));
 })
 
 app.use(fileUpload());
@@ -28,14 +28,14 @@ app.use("/pub", express.static(`${__dirname}/../frontend/public`));
 // If there is a data.json, read the data from the file, if not, use an empty Array
 let jsonData = [];
 try {
-    let data = fs.readFileSync(`${dataLocation}data.json`, error => {
+    let data = fs.readFileSync(`${dataLocation}images.json`, error => {
         if (error) {
             console.log(error);
         }
     });
     jsonData = JSON.parse(data);
 } catch (error) {
-    fs.writeFile(`${dataLocation}data.json`, JSON.stringify(jsonData), (error) => {
+    fs.writeFile(`${dataLocation}images.json`, JSON.stringify(jsonData), (error) => {
         if (error) {
             console.log(error);
         }
@@ -61,7 +61,7 @@ app.post("/", (req, res) => {
     formData.image_name = "profile.jpg";
     jsonData.push(formData);
 
-    fs.writeFile(`${dataLocation}data.json`, JSON.stringify(jsonData), (error) => {
+    fs.writeFile(`${dataLocation}images.json`, JSON.stringify(jsonData), (error) => {
         if (error) {
             console.log(error);
         }
@@ -70,20 +70,20 @@ app.post("/", (req, res) => {
 });
 
 
-app.post("/users/new", (req, res) => {
-    fs.readFile("../frontend/users.json", (error, data) => {
+app.post("/profile/new", (req, res) => {
+    fs.readFile("../frontend/profile.json", (error, data) => {
         if (error) {
             console.log(error);
-            res.send("Error reading users file")
+            res.send("Error reading profile JSON")
         } else {
-            const users = JSON.parse(data)
+            const profile = JSON.parse(data)
             console.log(req.body);
-            users.push(req.body)
+            profile.push(req.body)
             
-            fs.writeFile("../frontend/users.json", JSON.stringify(users), error => {
+            fs.writeFile("../frontend/profile.json", JSON.stringify(profile), error => {
                 if (error) {
                     console.log(error);
-                    res.send("Error writing users file")
+                    res.send("Error writing profile JSON")
                 }
             })
             res.send(req.body)
