@@ -3,72 +3,67 @@ const parseJSON = async (url) => {
     return response.json()
 }
 
-const userComponent = ({firstName, lastName}) => {
+const userComponent = ({first_name, last_name, street, house_number, city, zip, country, intro}) => {
     return `
     <div>
-        <h1>${firstName}</h1>
-        <h2>${lastName}</h2>
+        <h1>${first_name} ${last_name}</h1>
+        <p1>${street} ${house_number}</p1><br>
+        <p1>${city}</p1><br>
+        <p1>${zip}</p1><br>
+        <p1>${country}</p1><br>
+        <p>Introduction:<br>${intro}</p>
     </div>
     `
 }
 
+
 const addUserComponent = () => {
     return`
-    <form id="form">
-
-        <input type="file" class="picture" name="picture"><br>
-
+    <div>
         <label for="fname">First name</label><br>
-        <input type="text" class="fname" name="fname"><br>
+        <input class="inputField" type="text" class="fname" name="fname"><br>
 
         <label for="lname">Last name</label><br>
-        <input type="text" class="lname" name="lname"><br>
+        <input class="inputField" type="text" class="lname" name="lname"><br>
 
         <label for="street">Street</label><br>
-        <input type="text" class="street" name="street"><br>
+        <input class="inputField" type="text" class="street" name="street"><br>
 
         <label for="hnumber">House number</label><br>
-        <input type="text" class="hnumber" name="hnumber"><br>
+        <input class="inputField" type="text" class="hnumber" name="hnumber"><br>
 
         <label for="city">City</label><br>
-        <input type="text" class="city" name="city"><br>
+        <input class="inputField" type="text" class="city" name="city"><br>
 
         <label for="zip">Zip code</label><br>
-        <input type="number" class="zip" name="zip" min="1000" max="99999"><br>
+        <input class="inputField" type="number" class="zip" name="zip" min="1000" max="99999"><br>
 
         <label for="country">Country</label><br>
-        <input type="text" class="country" name="country"><br>
+        <input class="inputField" type="text" class="country" name="country"><br>
 
         <label for="intro">Introduction</label><br>
-        <textarea name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
+        <textarea class="inputField" name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
 
         <button class="button">Save</button>
-        <input type = "reset" value = "Reset">
-</form>
+        <button class ="reset">Delete</button>
+    </div>
     `
 }
 
 
 
-const loadEvent = async () => {
+const loadEvent = async (e) => {
 
-    if (window.location.pathname === "/admin/order-view/") {
-        console.log("Mi most az admin felületen vagyunk")
-    } else {
-        console.log("Mi most a vásárlói felületen vagyunk")
-    }
 
     const result = await parseJSON("/api/v1/users")
     const  rootElement = document.getElementById("root")
-    rootElement.insertAdjacentHTML(
-        "beforeend", 
-        result.map(user => userComponent(user)).join("")
-    )
+
 
     rootElement.insertAdjacentHTML("afterend", addUserComponent())
     
     const button = e.target.querySelector(".button")
-    const picture = e.target.querySelector(".picture")
+    const resetBtn = e.target.querySelector(".reset")
+    
     const firstName = e.target.querySelector(".fname")
     const lastName = e.target.querySelector(".lname")
     const street = e.target.querySelector(".street")
@@ -78,7 +73,18 @@ const loadEvent = async () => {
     const country = e.target.querySelector(".country")
     const intro = e.target.querySelector(".intro")
 
-    button.addEventListener("click", event => {
+    const inputFields = document.getElementsByTagName("input")
+
+    resetBtn.addEventListener("click", e => {
+        inputFields.value = ""
+
+     })
+        
+
+    button.addEventListener("click", e => {
+
+        e.preventDefault()
+
         const userData = {
             first_name: firstName.value,
             last_name: lastName.value,
@@ -88,7 +94,6 @@ const loadEvent = async () => {
             zip: zip.value,
             country: country.value,
             intro: intro.value,
-            image_name: picture.files[0]
         }
     
         fetch("/users/new", {
@@ -101,7 +106,7 @@ const loadEvent = async () => {
             .then(async data => {
                 const user = await data.json()
 
-                rootElement.insertAdjacentHTML("beforeend", userComponent(user))
+                rootElement.outerHTML = userComponent(user)
             })        
     })
 }
