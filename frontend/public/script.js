@@ -65,10 +65,9 @@ const loadEvent = async (e) => {
     const result = await parseJSON("/api/v1/users")
     const rootElement = document.getElementById("root")
     
+    rootElement.insertAdjacentHTML("beforeend", addUserComponent())
 
-    rootElement.insertAdjacentHTML("beforeend", pictureComponent);
-
-    rootElement.insertAdjacentHTML("afterend", addUserComponent())
+    rootElement.insertAdjacentHTML("afterend", pictureComponent);
     
     const dataBtn = e.target.querySelector(".buttonData")
     const picBtn = e.target.querySelector(".buttonPic")
@@ -130,7 +129,7 @@ const loadEvent = async (e) => {
                 if (data.status === 200) {
                     const res = await data.json();
 
-                    rootElement.insertAdjacentHTML("afterend",`<img src="upload/${res.pictureName}">`)
+                    form.innerHTML = `<img src=upload/${res.pictureName}>`
                     console.dir(data);
                 } 
             })
