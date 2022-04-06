@@ -3,11 +3,12 @@ const parseJSON = async (url) => {
     return response.json()
 }
 
-const userComponent = ({firstName, lastName}) => {
+const userComponent = ({id, name, status}) => {
     return `
     <div>
-        <h1>${firstName}</h1>
-        <h2>${lastName}</h2>
+        <h2>${id}</h2>
+        <h1>${name}</h1>
+        <h1>${status}</h1>
     </div>
     `
 }
@@ -15,8 +16,7 @@ const userComponent = ({firstName, lastName}) => {
 const addUserComponent = () => {
     return`
     <div>
-        <input type="text" class="firstName" name="firstName" placeholder="First name">
-        <input type="text" class="lastName" name="lastName" placeholder="Last name">
+        <input type="text" class="name" name="name" placeholder="Name">
         <button class="addNew">Send</button>
     </div>
     `
@@ -42,13 +42,11 @@ const loadEvent = async () => {
     rootElement.insertAdjacentHTML("afterend", addUserComponent())
 
     const button = document.querySelector(".addNew")
-    const firstName = document.querySelector(".firstName")
-    const lastName = document.querySelector(".lastName")
+    const name = document.querySelector(".name")
 
     button.addEventListener("click", event => {
         const userData = {
-            firstName: firstName.value,
-            lastName: lastName.value
+            name: name.value,
         }
     
         fetch("/users/new", {

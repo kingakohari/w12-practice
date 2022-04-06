@@ -85,13 +85,13 @@ app.get("/api/v1/users-params/:key", (req, res, next) => {
     console.dir(req.params)
     console.log(req.params.key)
     fs.readFile("../frontend/users.json", (error, data) => {
-         if (req.params.key === "active") {
+         if (req.params.key === true) {
             const users = JSON.parse(data)
-            const activeUsers = users.filter(user => user.status === "active");
+            const activeUsers = users.filter(user => user.status === true);
             res.send(activeUsers)
-        } else if (req.params.key === "passive"){
+        } else if (req.params.key === false){
             const users = JSON.parse(data)
-            const passiveUsers = users.filter(user => user.status === "passive");
+            const passiveUsers = users.filter(user => user.status === false);
             res.send(passiveUsers)
         } else res.send("An error occurred")
     })
