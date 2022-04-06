@@ -3,7 +3,7 @@ const parseJSON = async (url) => {
     return response.json()
 }
 
-const userComponent = ({id, name, status}) => {
+const studentComponent = ({id, name, status}) => {
     return `
     <div>
         <h2>${id}</h2>
@@ -13,7 +13,7 @@ const userComponent = ({id, name, status}) => {
     `
 }
 
-const addUserComponent = () => {
+const addStudentComponent = () => {
     return`
     <div>
         <input type="text" class="name" name="name" placeholder="Name">
@@ -26,40 +26,39 @@ const addUserComponent = () => {
 
 const loadEvent = async () => {
 
-    if (window.location.pathname === "/admin/order-view/") {
-        console.log("Mi most az admin felületen vagyunk")
-    } else {
-        console.log("Mi most a vásárlói felületen vagyunk")
-    }
 
-    const result = await parseJSON("/api/v1/users")
+    const result = await parseJSON("/api/students")
+    console.log(result);
     const  rootElement = document.getElementById("root")
     rootElement.insertAdjacentHTML(
         "beforeend", 
-        result.map(user => userComponent(user)).join("")
+        result.map(student => studentComponent(student)).join("")
     )
 
-    rootElement.insertAdjacentHTML("afterend", addUserComponent())
+    rootElement.insertAdjacentHTML("afterend", addStudentComponent())
 
     const button = document.querySelector(".addNew")
     const name = document.querySelector(".name")
+    const id =  result.length + 1
 
     button.addEventListener("click", event => {
-        const userData = {
+        const studentData = {
+            id: id,
             name: name.value,
+            status: true,
         }
     
-        fetch("/users/new", {
+        fetch("/students/new", {
             method: "POST",
             headers: {
                 "Content-Type" : "application/json"
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(studentData)
             })
             .then(async data => {
-                const user = await data.json()
+                const student = await data.json()
 
-                rootElement.insertAdjacentHTML("beforeend", userComponent(user))
+                rootElement.insertAdjacentHTML("beforeend", studentComponent(student))
             })        
     })
 }

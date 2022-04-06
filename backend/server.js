@@ -9,92 +9,70 @@ const port = 9000;
 
 const fFolder = `${__dirname}/../frontend`
 
-app.get("/", (req, res, next) => {                  // next = legyen-e további művelet végrehajtva, ha végzett?
+app.get("/", (req, res, next) => {                  
     res.sendFile(path.join(`${fFolder}/index.html`));
 }) 
 
 
-app.get("/api/v1/users", (req, res) => {
-    console.log("Request received for users endpoint.");
-    res.sendFile(path.join(`${fFolder}/users.json`));
+app.get("/api/students", (req, res) => {
+    console.log("Request received for students endpoint.");
+    res.sendFile(path.join(`${fFolder}/students.json`));
 })
 
-app.get("/api/v1/users-query", (req, res) => {
-    console.dir(req.query)
-    console.dir(req.query.apiKey)
-    if (req.query.apiKey === "apple") {
-        res.sendFile(path.join(`${fFolder}/users.json`))
-    } else {
-        res.send("Unauthorized request")
-    }
-})
-
-/* app.get("/api/v1/users-params/:key", (req, res) => {
+/* app.get("/api/students/:id", (req, res) => {
     console.dir(req.params)
-    console.log(req.params.key)
-    if (req.params.key === "apple") {
-        res.send("Azt írtad be, hogy alma")
-    } else {
-        res.send("Nem azt írtad be, hogy alma")
-    }   
-}) */
-
-
-/* app.get("/api/v1/users/active", (req, res, next) => {
-    console.log("Request received for active users endpoint.");
-    fs.readFile("../frontend/users.json", (error, data) => {
+    console.log(req.params.id)
+    fs.readFile("../frontend/students.json", (error, data) => {
         if (error) {
             res.send("Error occurred")
         } else  {
-            const users = JSON.parse(data)
-            const activeUsers = users.filter(user => user.status === "active");
-            res.send(activeUsers)
-        }
-    })
-})
-
-app.get("/api/v1/users/passive", (req, res, next) => {
-    console.log("Request received for passive users endpoint.");
-    fs.readFile("../frontend/users.json", (error, data) => {
-        if (error) {
-            res.send("Error occurred")
-        } else  {
-            const users = JSON.parse(data)
-            res.send(users.filter(user => user.status === "passive"));
+        const students = JSON.parse(data)
+        res.send(students.filter(student => student.id === req.params.id));
         }
     })
 }) */
 
-app.get("/api/v1/users-params/:key", (req, res, next) => {
-    console.dir(req.params)
-    console.log(req.params.key)
-    fs.readFile("../frontend/users.json", (error, data) => {
-         if (req.params.key === true) {
-            const users = JSON.parse(data)
-            const activeUsers = users.filter(user => user.status === true);
-            res.send(activeUsers)
-        } else if (req.params.key === false){
-            const users = JSON.parse(data)
-            const passiveUsers = users.filter(user => user.status === false);
-            res.send(passiveUsers)
-        } else res.send("An error occurred")
+
+app.get("/api/students/active", (req, res, next) => {
+    console.log("Request received for active students endpoint.");
+    fs.readFile("../frontend/students.json", (error, data) => {
+        if (error) {
+            res.send("Error occurred")
+        } else  {
+            const students = JSON.parse(data)
+            const activeStudents = students.filter(student => student.status === true);
+            res.send(activeStudents)
+        }
     })
 })
 
-app.post("/users/new", (req, res) => {
-    fs.readFile("../frontend/users.json", (error, data) => {
+app.get("/api/students/finished", (req, res, next) => {
+    console.log("Request received for passive students endpoint.");
+    fs.readFile("../frontend/students.json", (error, data) => {
+        if (error) {
+            res.send("Error occurred")
+        } else  {
+            const students = JSON.parse(data)
+            res.send(students.filter(student => student.status === false));
+        }
+    })
+}) 
+
+
+app.post("/students/new", (req, res) => {
+    fs.readFile("../frontend/students.json", (error, data) => {
         if (error) {
             console.log(error);
-            res.send("Error reading users file")
+            res.send("Error reading students file")
         } else {
-            const users = JSON.parse(data)
+            const students = JSON.parse(data)
             console.log(req.body);
-            users.push(req.body)
+            students.push(req.body)
             
-            fs.writeFile("../frontend/users.json", JSON.stringify(users), error => {
+            fs.writeFile("../frontend/students.json", JSON.stringify(students), error => {
                 if (error) {
                     console.log(error);
-                    res.send("Error writing users file")
+                    res.send("Error writing students file")
                 }
             })
             res.send(req.body)
