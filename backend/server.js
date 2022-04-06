@@ -19,18 +19,17 @@ app.get("/api/students", (req, res) => {
     res.sendFile(path.join(`${fFolder}/students.json`));
 })
 
-/* app.get("/api/students/:id", (req, res) => {
-    console.dir(req.params)
-    console.log(req.params.id)
+app.get("/api/students/1", (req, res) => {
+    console.log("Request to display student #1 received.");
     fs.readFile("../frontend/students.json", (error, data) => {
         if (error) {
             res.send("Error occurred")
         } else  {
         const students = JSON.parse(data)
-        res.send(students.filter(student => student.id === req.params.id));
+        res.send(students.filter(student => student.id === 1));
         }
     })
-}) */
+})  
 
 
 app.get("/api/students/active", (req, res, next) => {
