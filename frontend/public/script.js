@@ -21,48 +21,57 @@ const addUserComponent = () => {
     return`
     <div>
         <label for="fname">First name</label><br>
-        <input class="inputField" type="text" class="fname" name="fname"><br>
+        <input type="text" class="fname" name="fname"><br>
 
         <label for="lname">Last name</label><br>
-        <input class="inputField" type="text" class="lname" name="lname"><br>
+        <input type="text" class="lname" name="lname"><br>
 
         <label for="street">Street</label><br>
-        <input class="inputField" type="text" class="street" name="street"><br>
+        <input type="text" class="street" name="street"><br>
 
         <label for="hnumber">House number</label><br>
-        <input class="inputField" type="text" class="hnumber" name="hnumber"><br>
+        <input type="text" class="hnumber" name="hnumber"><br>
 
         <label for="city">City</label><br>
-        <input class="inputField" type="text" class="city" name="city"><br>
+        <input type="text" class="city" name="city"><br>
 
         <label for="zip">Zip code</label><br>
-        <input class="inputField" type="number" class="zip" name="zip" min="1000" max="99999"><br>
+        <input type="number" class="zip" name="zip" min="1000" max="99999"><br>
 
         <label for="country">Country</label><br>
-        <input class="inputField" type="text" class="country" name="country"><br>
+        <input type="text" class="country" name="country"><br>
 
         <label for="intro">Introduction</label><br>
-        <textarea class="inputField" name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
+        <textarea name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
 
-        <button class="button">Save</button>
+        <button class="buttonData">Save</button>
         <button class ="reset">Delete</button>
     </div>
     `
 }
 
+const pictureComponent = `
+    <form id="form">
+        <input type="text" name="title">
+        <input type="file" name="picture">
+        <button class=buttonPic>Send</button>
+    </form>
+`;
 
 
 const loadEvent = async (e) => {
 
 
     const result = await parseJSON("/api/v1/users")
-    const  rootElement = document.getElementById("root")
+    const rootElement = document.getElementById("root")
+    
 
+    rootElement.insertAdjacentHTML("beforeend", pictureComponent);
 
     rootElement.insertAdjacentHTML("afterend", addUserComponent())
     
-    const button = e.target.querySelector(".button")
-    const resetBtn = e.target.querySelector(".reset")
+    const dataBtn = e.target.querySelector(".buttonData")
+    const picBtn = e.target.querySelector(".buttonPic")
     
     const firstName = e.target.querySelector(".fname")
     const lastName = e.target.querySelector(".lname")
@@ -72,18 +81,10 @@ const loadEvent = async (e) => {
     const zip = e.target.querySelector(".zip")
     const country = e.target.querySelector(".country")
     const intro = e.target.querySelector(".intro")
-
-    const inputFields = document.getElementsByTagName("input")
-
-    resetBtn.addEventListener("click", e => {
-        inputFields.value = ""
-
-     })
         
 
-    button.addEventListener("click", e => {
+    dataBtn.addEventListener("click", () => {
 
-        e.preventDefault()
 
         const userData = {
             first_name: firstName.value,
@@ -106,9 +107,37 @@ const loadEvent = async (e) => {
             .then(async data => {
                 const user = await data.json()
 
-                rootElement.outerHTML = userComponent(user)
+                rootElement.innerHTML = userComponent(user)
             })        
     })
+
+    const formElement = document.getElementById("form");
+
+    formElement.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("title", e.target.querySelector(`input[name="title"]`).value);
+        formData.append("picture", e.target.querySelector(`input[name="picture"]`).files[0]);
+
+        const fetchSettings = {
+            method: "POST",
+            body: formData
+        };
+
+        fetch("/", fetchSettings)
+            .then(async data => {
+                if (data.status === 200) {
+                    const res = await data.json();
+
+                    rootElement.insertAdjacentHTML("afterend",`<img src="upload/${res.pictureName}">`)
+                    console.dir(data);
+                } 
+            })
+            .catch(error => {
+                console.dir(error);
+            })
+    });
 }
 
 window.addEventListener("load", loadEvent)
