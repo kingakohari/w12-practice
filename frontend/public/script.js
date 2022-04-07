@@ -21,31 +21,31 @@ const addUserComponent = () => {
     return`
     <div>
         <label for="fname">First name</label><br>
-        <input class="inputField1" type="text" class="fname" name="fname"><br>
+        <input type="text" class="fname" name="fname"><br>
 
         <label for="lname">Last name</label><br>
-        <input class="inputField2" type="text" class="lname" name="lname"><br>
+        <input type="text" class="lname" name="lname"><br>
 
         <label for="street">Street</label><br>
-        <input class="inputField3" type="text" class="street" name="street"><br>
+        <input type="text" class="street" name="street"><br>
 
         <label for="hnumber">House number</label><br>
-        <input class="inputField4" type="text" class="hnumber" name="hnumber"><br>
+        <input type="text" class="hnumber" name="hnumber"><br>
 
         <label for="city">City</label><br>
-        <input class="inputField5" type="text" class="city" name="city"><br>
+        <input type="text" class="city" name="city"><br>
 
         <label for="zip">Zip code</label><br>
-        <input class="inputField6" type="number" class="zip" name="zip" min="1000" max="99999"><br>
+        <input type="number" class="zip" name="zip" min="1000" max="99999"><br>
 
         <label for="country">Country</label><br>
-        <input class="inputField7" type="text" class="country" name="country"><br>
+        <input type="text" class="country" name="country"><br>
 
         <label for="intro">Introduction</label><br>
-        <textarea class="inputField8" name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
+        <textarea name="textarea" class="intro" name="intro" placeholder = "About me"></textarea><br>
 
         <button class="buttonData">Save</button>
-        <button class="reset">Delete</button>
+        <button class ="reset">Delete</button>
     </div>
     `
 }
@@ -69,7 +69,7 @@ const loadEvent = async (e) => {
 
     rootElement.insertAdjacentHTML("afterend", pictureComponent);
     
-    const resetBtn = e.target.querySelector(".reset")
+    /* const resetBtn = e.target.querySelector(".reset") */
     const dataBtn = e.target.querySelector(".buttonData")
     const picBtn = e.target.querySelector(".buttonPic")
     
@@ -82,6 +82,8 @@ const loadEvent = async (e) => {
     const country = e.target.querySelector(".country")
     const intro = e.target.querySelector(".intro")
         
+/*  Empty all fields on button click (upload fails when activated):
+
     const inputFields1 = document.querySelector(".inputField1")
     const inputFields2 = document.querySelector(".inputField2")
     const inputFields3 = document.querySelector(".inputField3")
@@ -100,7 +102,7 @@ const loadEvent = async (e) => {
         inputFields6.value = ""
         inputFields7.value = ""
         inputFields8.value = ""
-     })
+     })  */
 
 
     dataBtn.addEventListener("click", () => {
